@@ -7,30 +7,32 @@
 
 # Function to print usage report to stderr
 function print_usage {
-	echo "" >&2
-	echo "$0: Re-signs an IPA file." >&2
-	echo "" >&2
-	echo "Usage: $0 -i input.ipa [options]" >&2
-	echo "Options:" >&2
-	echo "  -e <entitlements>             Supply custom entitlements. If not supplied" >&2
-	echo "                                then default distribution entitlements will be" >&2
-	echo "                                generated using values from the app bundle." >&2
-	echo "  -h                            Show this help." >&2
-	echo "  -i <input_ipa>                Input IPA file. Must be supplied." >&2
-	echo "  -k                            Keep temporary directory." >&2
-	echo "  -o <output_ipa>               If not supplied, input file is overwritten." >&2
-	echo "  -p <provisioning_profile>     Specify the provisioning profile to use. If not" >&2
-	echo "                                supplied the one already in the bundle is used." >&2
-	echo "  -s <signing_identity>         Specify a different signing identity. Default" >&2
-	echo "                                value is 'iPhone Distribution:'." >&2
-	echo "  -v                            Perform verification." >&2
-	echo "  -x                            Display extra information after verification" >&2
-	echo "                                (only works with -v option)." >&2
-	echo "" >&2
-	echo "Usage examples:" >&2
-	echo "$0 -i MyApp.ipa -o MyApp_resigned.ipa -p AppStoreProfile.mobileprovision -kvx" >&2
-	echo "$0 -h" >&2
-	echo "" >&2
+	cat - >&2 <<UsageDelimiter
+
+$0: Re-signs an IPA file.
+
+Usage: $0 -i input.ipa [options]
+Options:
+  -e <entitlements>             Supply custom entitlements. If not supplied
+                                then default distribution entitlements will be
+                                generated using values from the app bundle.
+  -h                            Show this help.
+  -i <input_ipa>                Input IPA file. Must be supplied.
+  -k                            Keep temporary directory.
+  -o <output_ipa>               If not supplied, input file is overwritten.
+  -p <provisioning_profile>     Specify the provisioning profile to use. If not
+                                supplied the one already in the bundle is used.
+  -s <signing_identity>         Specify a different signing identity. Default
+                                value is 'iPhone Distribution:'.
+  -v                            Perform verification.
+  -x                            Display extra information after verification
+                                (only works with -v option).
+
+Usage examples:
+$0 -i MyApp.ipa -o MyApp_resigned.ipa -p AppStoreProfile.mobileprovision -kvx
+$0 -h
+
+UsageDelimiter
 }
 
 # Function to print any error to stderr

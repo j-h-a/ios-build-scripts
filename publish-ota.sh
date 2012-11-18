@@ -7,28 +7,30 @@
 
 # Function to print usage report to stderr
 function print_usage {
-	echo "" >&2
-	echo "$0: Publishes an IPA file for over-the-air installation." >&2
-	echo "Generates two files (install.html and install.plist) that can be placed" >&2
-	echo "alongside the IPA file for over-the-air installation." >&2
-	echo "" >&2
-	echo "Usage: $0 -i input.ipa -u installURL [options]" >&2
-	echo "Options:" >&2
-	echo "  -h                Show this help." >&2
-	echo "  -i <input_ipa>    Input IPA file. Must be supplied." >&2
-	echo "  -k                Keep temporary directory." >&2
-	echo "  -o <output_dir>   The output directory for the install files. If specified" >&2
-	echo "                    install.html and install.plist will be generated here and" >&2
-	echo "                    the IPA file will also be copied here. If not specified" >&2
-	echo "                    the install files will be placed in the working directory." >&2
-	echo "  -u <install_url>  The URL where the files will be available. This should be" >&2
-	echo "                    the URL path without trailing slash or filenames." >&2
-	echo "  -v                Include version information in the install.html file." >&2
-	echo "" >&2
-	echo "Usage examples:" >&2
-	echo "$0 -i MyApp.ipa -o ~/public_html/ota -u http://example.com/ota -kv" >&2
-	echo "$0 -h" >&2
-	echo "" >&2
+	cat - >&2 <<UsageDelimiter
+
+$0: Publishes an IPA file for over-the-air installation.
+Generates two files (install.html and install.plist) that can be placed
+alongside the IPA file for over-the-air installation.
+
+Usage: $0 -i input.ipa -u installURL [options]
+Options:
+  -h                Show this help.
+  -i <input_ipa>    Input IPA file. Must be supplied.
+  -k                Keep temporary directory.
+  -o <output_dir>   The output directory for the install files. If specified
+                    install.html and install.plist will be generated here and
+                    the IPA file will also be copied here. If not specified
+                    the install files will be placed in the working directory.
+  -u <install_url>  The URL where the files will be available. This should be
+                    the URL path without trailing slash or filenames.
+  -v                Include version information in the install.html file.
+
+Usage examples:
+$0 -i MyApp.ipa -o ~/public_html/ota -u http://example.com/ota -kv
+$0 -h
+
+UsageDelimiter
 }
 
 # Function to print any error to stderr

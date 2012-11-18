@@ -7,20 +7,22 @@
 
 # Function to print usage report to stderr
 function print_usage {
-	echo "" >&2
-	echo "$0: Builds project in release mode and packages it into an IPA file." >&2
-	echo "" >&2
-	echo "Usage: $0 -o output.ipa [options]" >&2
-	echo "Options:" >&2
-	echo "  -b <build_dir>    Specify build dir, defaults to './build' if not specified." >&2
-	echo "  -c                Clean up (delete) the build directory afterwards." >&2
-	echo "  -h                Show this help." >&2
-	echo "  -o <output_ipa>   The name of the output ipa file." >&2
-	echo "" >&2
-	echo "Usage examples:" >&2
-	echo "$0 -o MyApp.ipa -c" >&2
-	echo "$0 -h" >&2
-	echo "" >&2
+	cat - >&2 <<UsageDelimiter
+
+$0: Builds project in release mode and packages it into an IPA file.
+
+Usage: $0 -o output.ipa [options]
+Options:
+  -b <build_dir>    Specify build dir, defaults to './build' if not specified.
+  -c                Clean up (delete) the build directory afterwards.
+  -h                Show this help.
+  -o <output_ipa>   The name of the output ipa file.
+
+Usage examples:
+$0 -o MyApp.ipa -c
+$0 -h
+
+UsageDelimiter
 }
 
 # Function to print any error to stderr
