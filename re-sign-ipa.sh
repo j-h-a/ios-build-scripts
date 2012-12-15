@@ -185,21 +185,26 @@ if [ $? -ne 0 ]; then print_error "Couldn't remove old temporary directory at $T
 mkdir $TEMP_DIR
 if [ $? -ne 0 ]; then print_error "Couldn't create temporary directory at $TEMP_DIR" 0 1; fi
 echo "Using temporary directory: $TEMP_DIR"
+
 # unzip the IPA fila
 echo "Unzipping IPA file..."
 unzip $INPUT_IPA -d $TEMP_DIR 1>/dev/null
 if [ $? -ne 0 ]; then print_error "Failed to unzip input IPA file: $INPUT_IPA" 0 1; fi
+
 # Get the app bundle name with path
 PAYLOAD_DIR="$TEMP_DIR/Payload"
 APP_BUNDLE="$PAYLOAD_DIR/`ls $PAYLOAD_DIR/`"
+
 # Get the info.plist file and bundle identifier
 INFO_PLIST="$APP_BUNDLE/Info.plist"
 BUNDLE_IDENTIFIER=`/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$INFO_PLIST"`
 echo "App Bundle: $APP_BUNDLE ($BUNDLE_IDENTIFIER)"
+
 # Use existing provisioning profile if none specified
 if [ -z "$PROV_PROFILE" ]; then
 	PROV_PROFILE="$APP_BUNDLE/embedded.mobileprovision"
 fi
+
 # Use input IPA as output if no output file specified
 if [ -z $OUTPUT_IPA ]; then
 	OUTPUT_IPA="$INPUT_IPA"
@@ -211,6 +216,7 @@ fi
 RESOURCE_RULES="$TEMP_DIR/ResourceRules.plist"
 create_resource_rules
 echo "Resource Rules created: $RESOURCE_RULES"
+
 # Create default entitlements file if one wasn't specified
 if [ -z "$ENTITLEMENTS" ]; then
 	# Get the bundle seed (use the first one from the ApplicationIdentifierPrefix array in the provisioning profile)
@@ -221,6 +227,7 @@ if [ -z "$ENTITLEMENTS" ]; then
 	create_entitlements
 	echo "Entitlements created: $ENTITLEMENTS ($BUNDLE_SEED.$BUNDLE_IDENTIFIER)"
 fi
+
 # Sign the app bundle
 echo
 echo "Signing the app bundle at $APP_BUNDLE..."

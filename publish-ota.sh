@@ -183,13 +183,16 @@ if [ $? -ne 0 ]; then print_error "Couldn't remove old temporary directory at $T
 mkdir $TEMP_DIR
 if [ $? -ne 0 ]; then print_error "Couldn't create temporary directory at $TEMP_DIR" 0 1; fi
 echo "Using temporary directory: $TEMP_DIR"
+
 # unzip the IPA fila
 echo "Unzipping IPA file..."
 unzip $INPUT_IPA -d $TEMP_DIR 1>/dev/null
 if [ $? -ne 0 ]; then print_error "Failed to unzip input IPA file: $INPUT_IPA" 0 1; fi
+
 # Get the app bundle name with path
 PAYLOAD_DIR="$TEMP_DIR/Payload"
 APP_BUNDLE="$PAYLOAD_DIR/`ls $PAYLOAD_DIR/`"
+
 # Get the info.plist file and bundle identifier
 INFO_PLIST="$APP_BUNDLE/Info.plist"
 BUNDLE_IDENTIFIER=`/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$INFO_PLIST"`
