@@ -50,7 +50,7 @@ BUILD_DIR="./build"
 OUTPUT_IPA=""
 
 # Parse the options
-while getopts ":cho:p:s:" opt; do
+while getopts ":b:cho:" opt; do
 	case $opt in
 	b)
 		BUILD_DIR="$OPTARG"
