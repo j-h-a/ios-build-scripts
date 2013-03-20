@@ -15,11 +15,12 @@ Usage: $0 -o output.ipa [options]
 Options:
   -b <build_dir>    Specify build dir, defaults to './build' if not specified.
   -c                Clean up (delete) the build directory afterwards.
+  -d <output_dsym>  The name of the (optional) output dSYM.zip file.
   -h                Show this help.
-  -o <output_ipa>   The name of the output ipa file.
+  -o <output_ipa>   The name of the output .ipa file (required).
 
 Usage examples:
-$0 -o MyApp.ipa -c
+$0 -o MyApp.ipa -d MyApp.app.dSYM.zip -c
 $0 -h
 
 UsageDelimiter
@@ -48,15 +49,19 @@ error=""
 cleanup=0
 BUILD_DIR="./build"
 OUTPUT_IPA=""
+OUTPUT_DSYM=""
 
 # Parse the options
-while getopts ":b:cho:" opt; do
+while getopts ":b:cd:ho:" opt; do
 	case $opt in
 	b)
 		BUILD_DIR="$OPTARG"
 		;;
 	c)
 		cleanup=1
+		;;
+	d)
+		OUTPUT_DSYM="$OPTARG"
 		;;
 	h)
 		help=1
@@ -104,6 +109,15 @@ xcodebuild CONFIGURATION_BUILD_DIR="$BUILD_DIR" -configuration Release clean bui
 # Package it into the IPA file
 APP_BUNDLE=`ls -d $BUILD_DIR/*.app`
 xcrun -verbose -sdk iphoneos PackageApplication "$APP_BUNDLE" -o "${PWD}/$OUTPUT_IPA"
+
+# Check if we should zip up the dSYM directory
+if [ -n $OUTPUT_DSYM ]; then
+	# Zip up the dSYM directory
+	mv $BUILD_DIR/*.app.dSYM .
+	DSYM_DIR=`ls -d *.app.dSYM`
+	zip $OUTPUT_DSYM -r $DSYM_DIR
+	mv $DSYM_DIR $BUILD_DIR
+fi
 
 # Cleanup...
 if [ $cleanup -ne 0 ]; then
