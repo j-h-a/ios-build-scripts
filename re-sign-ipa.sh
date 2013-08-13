@@ -188,7 +188,7 @@ echo "Using temporary directory: $TEMP_DIR"
 
 # unzip the IPA fila
 echo "Unzipping IPA file..."
-unzip $INPUT_IPA -d $TEMP_DIR 1>/dev/null
+unzip "$INPUT_IPA" -d $TEMP_DIR 1>/dev/null
 if [ $? -ne 0 ]; then print_error "Failed to unzip input IPA file: $INPUT_IPA" 0 1; fi
 
 # Get the app bundle name with path
@@ -206,7 +206,7 @@ if [ -z "$PROV_PROFILE" ]; then
 fi
 
 # Use input IPA as output if no output file specified
-if [ -z $OUTPUT_IPA ]; then
+if [ -z "$OUTPUT_IPA" ]; then
 	OUTPUT_IPA="$INPUT_IPA"
 fi
 
