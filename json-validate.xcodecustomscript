@@ -1,0 +1,49 @@
+# Function to strip the comments
+function strip_comments {
+    # Strip comments and leave empty lines, so line numbers are preserved
+    sed 's/^[[:blank:]]*\/\/.*$//g' "$1"
+}
+
+# Function to do the validation
+function do_validation {
+    # Use json.tool to validate, sending stderr to stdout
+    echo "$1" | python -m json.tool 2>&1 > /dev/null
+}
+
+# Function to process validation errors
+function handle_invalid {
+    # Parse the line and column from the output
+    MATCH="line ([0-9]+) column ([0-9]+)"
+    if [[ "$1" =~ $MATCH ]]; then
+        LINE=${BASH_REMATCH[1]}
+        COLUMN=${BASH_REMATCH[2]}
+    fi
+    echo "$INPUT_FILE_PATH:$LINE:$COLUMN: error: $1"
+}
+
+# Function to wrap all the validation steps
+function validate {
+    # Do validation
+    VALIDATION_ERROR=$(do_validation "$1")
+    # Check return status
+    local STATUS=$?
+    if [ $STATUS -ne 0 ]; then
+        handle_invalid "$VALIDATION_ERROR"
+    fi
+    # Return the exit status from the validation
+    return $STATUS
+}
+
+# Get the stripped file
+STRIPPED=$(strip_comments "$INPUT_FILE_PATH")
+
+# Validate the JSON
+validate "$STRIPPED"
+VALIDATION_STATUS=$?
+
+# Carry on, even if there was an error (file still copied to bundle)
+echo "$STRIPPED" > "$DERIVED_FILE_DIR/$INPUT_FILE_NAME"
+
+# Exit with the validation status
+exit $VALIDATION_STATUS
+

@@ -68,3 +68,41 @@ re-sign-ipa.sh
 	Usage examples:
 	re-sign-ipa.sh -i MyApp.ipa -o MyApp_resigned.ipa -p AppStoreProfile.mobileprovision -kvx
 	re-sign-ipa.sh -h
+
+json-validate.xcodecustomscript
+===============================
+
+This is a custom Xcode build script, intended to run from Xcode as part of the
+build process. It strips single-line C++ style comments from JSON files and
+validates the JSON at compile time.
+
+The validation saves time if you are using hand-written JSON data in your app
+bundle as it finds any errors at compile time, wile the comments allow you to
+annotate your hand-written JSON. Only lines that begin with `//` (optionally
+preceeded by whitespace) are stripped.
+
+    // This comment is supported and will be stripped
+    {
+        // This comment is also stripped
+        "myArray" : [1, 2, 3] // This comment is not stripped
+    }
+
+The script outputs the file, line, and column of any errors in the format that
+Xcode uses for errors. This means you can click on the error to jump straight
+to it in the IDE and Xcode will annotate the affected lines with the error
+message right in the editor.
+
+### To use this script in your project:
+
+1.  In the Project Navigator select your project, then in the 'TARGETS' section
+    select your target and go to the 'Build Rules' tab.
+2.  Click the '+' to add a custom build rule.
+3.  In the text-field named "Process [Source files with names matching:]" enter
+    `*.json`.
+4.  In the section named "Using [Custom script:]" paste the contents of the
+    `json-validate.xcodecustomscript` file.
+5.  In the "Output Files" section below, click the '+' to add an output file
+    and in the text field enter `$(DERIVED_FILE_DIR)/$(INPUT_FILE_NAME)` as the
+    output file name.
+6.  Optional: The name of the rule will be "Files '*.json' using Script" - you
+    can click on this an change it to "Validate JSON" or whatever you like.
