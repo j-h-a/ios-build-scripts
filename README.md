@@ -77,7 +77,7 @@ build process. It strips single-line C++ style comments from JSON files and
 validates the JSON at compile time.
 
 The validation saves time if you are using hand-written JSON data in your app
-bundle as it finds any errors at compile time, wile the comments allow you to
+bundle as it finds any errors at compile time, while the comments allow you to
 annotate your hand-written JSON. Only lines that begin with `//` (optionally
 preceeded by whitespace) are stripped.
 
@@ -105,4 +105,4 @@ message right in the editor.
     and in the text field enter `$(DERIVED_FILE_DIR)/$(INPUT_FILE_NAME)` as the
     output file name.
 6.  Optional: The name of the rule will be "Files '*.json' using Script" - you
-    can click on this an change it to "Validate JSON" or whatever you like.
+    can click on this and change it to "Validate JSON", or whatever you like.
